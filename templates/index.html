@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../static/css/jqcloud.min.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../static/js/jqcloud.min.js"></script>
+  <!--<script type=text/javascript>
+    $(function() {
+        $('a#get_data').click(function() {
+            $.ajax({
+                url: '/getData',
+                data: $('Select[name="company"]').serialize(),
+                success: function(response) {
+                    console.log(response)
+                    $('#word_cloud').jQCloud(response.result, {
+                        width: 400,
+                        height: 250
+                  });
+                   $('#word_cloud1').jQCloud(response.result, {
+                        width: 400,
+                        height: 250
+                    });
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+  </script>-->
+  <!--<script type=text/javascript>
+      $(function() {
+        $.ajax({url: '/wordCloudX', success: function (data) {
+           var words_data = $.parseJSON(data);
+           console.log(words_data)
+           $('#word_cloud').jQCloud(words_data, {
+               width: 400,
+               height: 250
+           });
+           $('#word_cloud1').jQCloud(words_data, {
+               width: 400,
+               height: 250
+           });
+        }});
+      });
+  </script>-->
+  <script type=text/javascript>
+			$(function() {
+			  $('a#get_data').bind('click', function() {
+				$.getJSON('/getData', {
+				  name: $('Select[name="company"]').val(),
+				}, function(data) {
+				  //$("#result").text(data.result);
+				  console.log(data.result);
+				  $('#word_cloud').empty();
+				  $('#word_cloud').jQCloud('destroy');
+			      $('#word_cloud1').empty();
+			      $('#word_cloud1').jQCloud('destroy');
+				  $('#word_cloud').jQCloud(data.result, {
+                        width: 400,
+                        height: 250
+                  });
+                   $('#word_cloud1').jQCloud(data.result, {
+                        width: 400,
+                        height: 250
+                    });
+
+				});
+				return false;
+			  });
+			});
+  </script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">CSHack3</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="/crawler">Crawler</a></li>
+      <li><a href="#">Page 2</a></li>
+    </ul>
+    <form class="navbar-form navbar-right">
+      <div class="form-group">
+          <Select class="form-control" name="company" id="company">
+              {% for name in data.keywords %}
+              <option name={{name}}>{{name}}</option>
+              {% endfor %}
+          </Select>
+      </div>
+        <a href=# id=get_data><button class="btn btn-default">Submit</button></a>
+    </form>
+  </div>
+</nav>
+
+<!--<section class="jumbotron text-center">
+    <div class="container">
+      <div class="row">
+            <div class="col-md-6">
+              <div class="card mb-6 box-shadow">
+                <div class="card-body">
+                    <div id="word_cloud1"></div>
+              </div>
+            </div>
+            </div>
+           <div class="col-md-6">
+              <div class="card mb-6 box-shadow">
+                <div class="card-body">
+                    <div id="word_cloud"></div>
+              </div>
+            </div>
+            </div>
+      </div>
+    </div>
+</section>-->
+
+<section>
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="form-group col-xs-6">
+                        <h3>Panel1</h3>
+                        <p>Use the .navbar-form class to vertically align form elements (same padding as links) inside the navbar.</p>
+                    </div>
+                    <div class="form-group col-xs-6">
+                        <h3>Panel2</h3>
+                        <p>Use the .navbar-form class to vertically align form elements (same padding as links) inside the navbar.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <h3>Navbar Forms</h3>
+        <p>Use the .navbar-form class to vertically align form elements (same padding as links) inside the navbar.</p>
+    </div>
+</section>
+
+</body>
+</html>

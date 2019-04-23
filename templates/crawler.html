@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <style>
+        table td {
+            font-size: 13px;
+        }
+    </style>
+ <script type="text/javascript">
+    $(function() {
+        $( "#datepicker" ).datepicker({
+            dateFormat : 'dd/MM/yy',
+            changeMonth : true,
+            changeYear : true,
+            yearRange: '-100y:c+nn',
+            maxDate: '-1d'
+        });
+    });
+ </script>
+ <script type=text/javascript>
+    $(function() {
+      $('a#crawl').bind('click', function() {
+        var sources = [];
+           $("#source:checked").each(function() {
+              sources.push($(this).val());
+           });
+        $.getJSON('/crawlData', {
+           sources: sources,
+           stocks: $('#stockList').val(),
+           dt: $('input[id="datepicker"]').val()
+        }, function(response) {
+            var content = '<table class="table table-bordered table-hover table-striped"><thead><tr><th>Stock Name</th><th>Text</th><th>Url</th></tr></thead>'
+            for(k in response.result){
+                i = JSON.parse(response.result[k])
+                console.log(i['data']['w'])
+                content += '<tr><td>' + i['data']['w'] + '</td><td>' + i['data']['t'] + '</td><td><a href='+ i['data']['u'] + ' target="_blank">' + i['data']['u']+'</a></td></tr>';
+            }
+            content += "</table>"
+            $("#resultdata").html(content);
+        });
+        return false;
+      });
+    });
+</script>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">CSHack3</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="#">Home</a></li>
+      <li class="active"><a href="#">Crawler</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section>
+    <div class="container">
+      <h2>Crawler</h2>
+      <div class="panel panel-default">
+         <div class="panel-body">
+             <form>
+                <div class="row">
+                    <div class="form-group col-xs-4">
+                        <label for="stockList">Stocks</label>
+                        <select multiple class = "form-control input-sm" name="stockList" id="stockList" size="4">
+                            {% for name in data.keywords %}
+                            <option name={{name}}>{{name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-xs-4">
+                        <div class="checkbox">
+                            {% for url in data.urls %}
+                                <label><input type="checkbox" id="source" value={{ url }}> {{ url }}</label><br>
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+                </div>
+                 <div class="row">
+                      <div class="form-group col-xs-4">
+                            <input type="text" id="datepicker" class="form-control" placeholder="Date">
+                      </div>
+                 </div>
+                 <a href=# id=crawl><button class="btn btn-primary">Submit</button></a>
+             </form>
+         </div>
+      </div>
+      <div class="row">
+            <div class="col-md-12" id="resultdata">
+            </div>
+      </div>
+    </div>
+</section>
+
+
+</body>
+</html>
