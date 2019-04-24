@@ -41,19 +41,3 @@ class LinkFinder(HTMLParser):
     def getItems(self):
         return self.itemSet
 
-#finder = LinkFinder()
-#url = "https://economictimes.indiatimes.com/archivelist/year-2019,month-4,starttime-43567.cms"
-#request = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-#html = urlopen(request).read()
-#print(html.decode('utf-8'))
-#finder.feed(html.decode('utf-8'))
-#finder.feed('<HTML><HEAD><TITLE>Your Title Here</TITLE></HEAD><BODY BGCOLOR="FFFFFF"><CENTER><IMG SRC="clouds.jpg" ALIGN="BOTTOM"> </CENTER><HR><a href="http://somegreatsite.com">Infosys Q4 result impressive</a>is a link to another nifty site<H1>This is a Header</H1><H2>This is a Medium Header</H2>Send meail at <a href="mailto:support@yourcompany.com">support@tcs.com</a><P> This is a new paragraph!<P> <B>This is a new paragraph!</B><BR> <B><I>This is a new sentence without a paragraph break, in bold italics.</I></B><HR></BODY></HTML> ')
-#print(finder.itemSet)
-#for item in finder.itemSet:
-#    print(json.dumps(item.__dict__))
-
-#finder.close()
-
-
-
-

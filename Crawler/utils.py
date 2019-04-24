@@ -38,7 +38,3 @@ def write_to_file(fileName, data):
     with open(fileName, 'w') as f:
         f.write(data)
 
-
-#quotes = getQuote('INFY', date(2019,4,15))
-#print(json.dumps(quotes.__dict__))
-
