@@ -3,17 +3,16 @@ from Crawler.items import Items
 
 class FinalData(object):
 
-    def __init__(self, dt, item):
+    def __init__(self, dt, item,quote):
         self.dt = dt
         self.data = item
+        self.quote = quote
 
     def get_item(self):
         return self.data
 
     def reprJSON(self):
-        return dict(dt=self.dt, data=self.data.reprJSON())
-
-
+        return dict(dt=self.dt, data=self.data.reprJSON(), quote= self.quote.__dict__)
 
     def toJSONString(self):
         return json.dumps(self, default=lambda o: o.__dict__,

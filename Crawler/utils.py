@@ -1,6 +1,25 @@
 import os
+from nsepy import get_history
+from datetime import datetime
+import json
+
+from Crawler.quote import Quote
 
 BASE_PATH="/home/vizdata/Documents/data"
+
+def getQuote(symbol, start):
+    dt =  datetime.strptime(start, "%d/%B/%Y").date()
+    quote_json = get_history(symbol=symbol, start=dt, end=dt).to_dict()
+    #quote_json = quoteData.to_dict()
+    quote = Quote(str(start),
+                  quote_json['Open'][dt],
+                  quote_json['High'][dt],
+                  quote_json['Low'][dt],
+                  quote_json['Close'][dt],
+                  quote_json['Volume'][dt])
+
+    return quote
+
 
 #each tag has separate directory
 def create_crawl_directory(dirName):
@@ -20,5 +39,6 @@ def write_to_file(fileName, data):
         f.write(data)
 
 
-
+#quotes = getQuote('INFY', date(2019,4,15))
+#print(json.dumps(quotes.__dict__))
 
