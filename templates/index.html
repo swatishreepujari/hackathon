@@ -10,6 +10,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="../static/js/jqcloud.min.js"></script>
+  <script src="http://d3js.org/d3.v4.js"></script>
   <!--<script type=text/javascript>
     $(function() {
         $('a#get_data').click(function() {
@@ -70,6 +71,9 @@
                         width: 400,
                         height: 250
                     });
+                    freqData= data.result
+                    pieGraph('#panel1',freqData);
+
 
 				});
 				return false;
@@ -128,11 +132,19 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="row">
-                    <div class="form-group col-xs-6">
+                    <div class="form-group col-xs-3" id="panel1">
                         <h3>Panel1</h3>
                         <p>Use the .navbar-form class to vertically align form elements (same padding as links) inside the navbar.</p>
                     </div>
-                    <div class="form-group col-xs-6">
+                    <div class="form-group col-xs-3" id="panel2">
+                        <h3>Panel2</h3>
+                        <p>Use the .navbar-form class to vertically align form elements (same padding as links) inside the navbar.</p>
+                    </div>
+                    <div class="form-group col-xs-3" id="panel3">
+                        <h3>Panel1</h3>
+                        <p>Use the .navbar-form class to vertically align form elements (same padding as links) inside the navbar.</p>
+                    </div>
+                    <div class="form-group col-xs-3" id="panel4">
                         <h3>Panel2</h3>
                         <p>Use the .navbar-form class to vertically align form elements (same padding as links) inside the navbar.</p>
                     </div>

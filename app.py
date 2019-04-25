@@ -6,8 +6,10 @@ from jsonUtil import JsonUtil
 from Crawler.LinkFinder import LinkFinder
 from Crawler.finalData import FinalData
 from Crawler import utils
+from nlp import NLP
 
 import pandas as pd
+
 
 SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
 quotes = {}
@@ -128,9 +130,17 @@ def getData():
     data_file = os.path.join(SITE_ROOT, "data", name + ".json")
     data = json.load(open(data_file))
     jsonUtil = JsonUtil(data)
-    wordCloud = jsonUtil.getWordCloudData()
+    sentiDataList = jsonUtil.getText()
+    sdlList=[]
+    nlp = NLP()
+    for s in sentiDataList:
+        sdl = nlp.getScore(s)
+        #print(str(sdl))
+        sdlList.append(sdl)
+
+    #wordCloud = jsonUtil.getWordCloudData()
     # print(jsonify(result=wordCloud))
-    return jsonify(result=wordCloud)
+    return jsonify(result=sdlList)
 
 
 @app.route('/wordCloud', methods=['GET'])
