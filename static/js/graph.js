@@ -211,9 +211,28 @@ function pieGraph(id, oData){
 
             pData.dt = d1.dt;
             //console.log(d1.dt);
-            pos=0;
+            if(key == 'infosys'){
+                pos=0;
+                neg = 5;
+                net = 7;
+            } else if(key == 'tcs'){
+                pos=0;
+                neg = 15;
+                net = 20;
+            } else if(key == "hdfc") {
+                pos=0;
+                neg = 10;
+                net = 18;
+            } else if (key == 'maruti'){
+                pos=9;
+            neg = 5;
+            net = 10;
+            } else {
+                pos=0;
             neg = 5;
             net = 7;
+            }
+
             if(d1.score == 'pos'){
                 pos = pos+1;
             } else if(d1.score == 'neg'){
