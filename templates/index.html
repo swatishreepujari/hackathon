@@ -29,54 +29,19 @@
     }
   </style>
 
-  <!--<script type=text/javascript>
-    $(function() {
-        $('a#get_data').click(function() {
-            $.ajax({
-                url: '/getData',
-                data: $('Select[name="company"]').serialize(),
-                success: function(response) {
-                    console.log(response)
-                    $('#word_cloud').jQCloud(response.result, {
-                        width: 400,
-                        height: 250
-                  });
-                   $('#word_cloud1').jQCloud(response.result, {
-                        width: 400,
-                        height: 250
-                    });
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            });
-        });
-    });
-  </script>-->
-  <!--<script type=text/javascript>
-      $(function() {
-        $.ajax({url: '/wordCloudX', success: function (data) {
-           var words_data = $.parseJSON(data);
-           console.log(words_data)
-           $('#word_cloud').jQCloud(words_data, {
-               width: 400,
-               height: 250
-           });
-           $('#word_cloud1').jQCloud(words_data, {
-               width: 400,
-               height: 250
-           });
-        }});
-      });
-  </script>-->
+</script>
+
+
   <script type=text/javascript>
 			$(function() {
 			  $('a#get_data').bind('click', function() {
 				$.getJSON('/getData', {
+
 				  name: $('Select[name="company"]').val(),
 				}, function(data) {
 				    oData = data.result;
 				    oData.key = data.key;
+
                      $('#word_cloud').empty();
                      $('#panel1').empty()
                      $('#panel2').empty()
@@ -117,25 +82,25 @@
   </div>
 </nav>
 
-<section>
+<section id="sect">
     <div class="container">
         <div class="panel panel-primary">
-            <div class="panel-heading">Histogram</div>
+            <div class="panel-heading">Sentiment Graph</div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="form-group col-xs-3" id="panel1">
-                        <h3>Panel1</h3>
-                        <p>Use the .navbar-form class to vertically align form elements (same padding as links) inside the navbar.</p>
+                    <div class="form-group col-xs-5" id="panel1">
+                        <h3>Positive/Negetive/Neutral</h3>
+
                     </div>
-                    <div class="form-group col-xs-9" id="panel2">
-                        <h3>Panel2</h3>
-                        <p>Use the .navbar-form class to vertically align form elements (same padding as links) inside the navbar.</p>
+                    <div class="form-group col-xs-7" id="panel2">
+                        <h3>Stock Price Movement</h3>
+
                     </div>
                 </div>
             </div>
         </div>
          <div class="panel panel-primary">
-            <div class="panel-heading">Histogram</div>
+            <div class="panel-heading">Feature Cloud</div>
                 <div class="row">
                     <div class="form-group col-xs-4">
                     </div>
