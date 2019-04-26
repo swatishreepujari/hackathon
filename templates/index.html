@@ -76,6 +76,7 @@
 				  name: $('Select[name="company"]').val(),
 				}, function(data) {
 				    oData = data.result;
+				    oData.key = data.key;
                      $('#word_cloud').empty();
                      $('#panel1').empty()
                      $('#panel2').empty()

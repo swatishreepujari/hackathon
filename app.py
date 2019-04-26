@@ -17,6 +17,7 @@ equities = {}
 config_data = {}
 
 app = Flask(__name__)
+key=''
 
 app_config = os.path.join(SITE_ROOT, "config", 'app_config.json')
 with open(app_config) as f:
@@ -126,6 +127,7 @@ def getData():
     print("received....")
     # print(request)
     name = request.args['name']
+    key=name
     print(name)
     data_file = os.path.join(SITE_ROOT, "data", name + ".json")
     data = json.load(open(data_file))
@@ -146,7 +148,8 @@ def getData():
 
     #wordCloud = jsonUtil.getWordCloudData()
     # print(jsonify(result=wordCloud))
-    return jsonify({'result':sdlList,'cloud':cloud_data})
+
+    return jsonify({'result':sdlList,'cloud':cloud_data, 'key':key})
 
 
 def readConfig():

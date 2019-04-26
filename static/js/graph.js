@@ -196,6 +196,7 @@ function dashboard(id, fData){
 }
 
 function pieGraph(id, oData){
+    var key = oData.key;
     var barColor = 'steelblue';
     function segColor(c){ return {pos:"#807dba", neg:"#e08214",net:"#41ab5d"}[c]; }
 
@@ -211,8 +212,8 @@ function pieGraph(id, oData){
             pData.dt = d1.dt;
             //console.log(d1.dt);
             pos=0;
-            neg = 2;
-            net = 1;
+            neg = 5;
+            net = 7;
             if(d1.score == 'pos'){
                 pos = pos+1;
             } else if(d1.score == 'neg'){
