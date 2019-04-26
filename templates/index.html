@@ -10,7 +10,25 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="../static/js/jqcloud.min.js"></script>
-  <script src="http://d3js.org/d3.v4.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script type="text/javascript" src="../static/js/graph.js"></script>
+    <style> /* set the CSS */
+    path {
+      stroke-width: 2;
+      fill: none;
+    }
+    .axis path, .axis line {
+      fill: none;
+      stroke: grey;
+      stroke-width: 1;
+      shape-rendering: crispEdges;
+    }
+    .area {
+      fill: #F0F8FF;
+      stroke-width: 0;
+    }
+  </style>
+
   <!--<script type=text/javascript>
     $(function() {
         $('a#get_data').click(function() {
@@ -57,25 +75,18 @@
 				$.getJSON('/getData', {
 				  name: $('Select[name="company"]').val(),
 				}, function(data) {
-				  //$("#result").text(data.result);
-				  console.log(data.result);
-				  $('#word_cloud').empty();
-				  $('#word_cloud').jQCloud('destroy');
-			      $('#word_cloud1').empty();
-			      $('#word_cloud1').jQCloud('destroy');
-				  $('#word_cloud').jQCloud(data.result, {
-                        width: 400,
-                        height: 250
-                  });
-                   $('#word_cloud1').jQCloud(data.result, {
-                        width: 400,
-                        height: 250
-                    });
-                    freqData= data.result
-                    pieGraph('#panel1',freqData);
-
-
-				});
+				    oData = data.result;
+                     $('#word_cloud').empty();
+                     $('#panel1').empty()
+                     $('#panel2').empty()
+                     $('#word_cloud').jQCloud('destroy');
+                     $('#word_cloud').jQCloud(data.cloud, {
+                            width: 500,
+                            height: 300
+                     });
+                     pieGraph('#panel1',oData);
+				     lineGraph('#panel2',oData);
+ 				});
 				return false;
 			  });
 			});
@@ -106,54 +117,35 @@
   </div>
 </nav>
 
-<!--<section class="jumbotron text-center">
-    <div class="container">
-      <div class="row">
-            <div class="col-md-6">
-              <div class="card mb-6 box-shadow">
-                <div class="card-body">
-                    <div id="word_cloud1"></div>
-              </div>
-            </div>
-            </div>
-           <div class="col-md-6">
-              <div class="card mb-6 box-shadow">
-                <div class="card-body">
-                    <div id="word_cloud"></div>
-              </div>
-            </div>
-            </div>
-      </div>
-    </div>
-</section>-->
-
 <section>
     <div class="container">
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Histogram</div>
             <div class="panel-body">
                 <div class="row">
                     <div class="form-group col-xs-3" id="panel1">
                         <h3>Panel1</h3>
                         <p>Use the .navbar-form class to vertically align form elements (same padding as links) inside the navbar.</p>
                     </div>
-                    <div class="form-group col-xs-3" id="panel2">
-                        <h3>Panel2</h3>
-                        <p>Use the .navbar-form class to vertically align form elements (same padding as links) inside the navbar.</p>
-                    </div>
-                    <div class="form-group col-xs-3" id="panel3">
-                        <h3>Panel1</h3>
-                        <p>Use the .navbar-form class to vertically align form elements (same padding as links) inside the navbar.</p>
-                    </div>
-                    <div class="form-group col-xs-3" id="panel4">
+                    <div class="form-group col-xs-9" id="panel2">
                         <h3>Panel2</h3>
                         <p>Use the .navbar-form class to vertically align form elements (same padding as links) inside the navbar.</p>
                     </div>
                 </div>
-
             </div>
         </div>
-        <h3>Navbar Forms</h3>
-        <p>Use the .navbar-form class to vertically align form elements (same padding as links) inside the navbar.</p>
+         <div class="panel panel-primary">
+            <div class="panel-heading">Histogram</div>
+                <div class="row">
+                    <div class="form-group col-xs-4">
+                    </div>
+                    <div class="form-group col-xs-4" id="word_cloud">
+                    </div>
+                    <div class="form-group col-xs-4">
+                    </div>
+                </div>
+
+            </div>
     </div>
 </section>
 

@@ -1,8 +1,8 @@
 from flask import Flask, render_template, json, jsonify, request
 import os
 from urllib.request import Request, urlopen
-
-from jsonUtil import JsonUtil
+from collections import Counter
+from jsonUtil import JsonUtil,getWordCloudData
 from Crawler.LinkFinder import LinkFinder
 from Crawler.finalData import FinalData
 from Crawler import utils
@@ -133,21 +133,20 @@ def getData():
     sentiDataList = jsonUtil.getText()
     sdlList=[]
     nlp = NLP()
+    sentList = []
     for s in sentiDataList:
+        for sText in s.get_text():
+            sentList.append(sText)
         sdl = nlp.getScore(s)
         #print(str(sdl))
         sdlList.append(sdl)
+    #print(type(sentList))
+    cloud_data = getWordCloudData(sentList)
+    #print(cloud_data)
 
     #wordCloud = jsonUtil.getWordCloudData()
     # print(jsonify(result=wordCloud))
-    return jsonify(result=sdlList)
-
-
-@app.route('/wordCloud', methods=['GET'])
-def wordCloud():
-    data = u'[{"text":"police","weight":5},{"text":"parents","weight":3},{"text":"policekil","weight":8},{"text":"parents66","weight":7},{"text":"policedfd","weight":5},{"text":"parentsgg","weight":3},{"text":"police5","weight":8},{"text":"parents4","weight":7}]'
-    print(data)
-    return data
+    return jsonify({'result':sdlList,'cloud':cloud_data})
 
 
 def readConfig():

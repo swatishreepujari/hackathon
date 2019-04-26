@@ -57,11 +57,6 @@ class NLP():
             sent_data = {"dt": dt,"qt":s.get_quotes(), "text": sent, "score": senti, "confi":polarity, "feature":features}
             sent_data_list.append(sent_data)
         return sent_data_list
-
-
-
-
-
 class EnsembleClassifier(ClassifierI):
 
     def __init__(self, *classifiers):

@@ -4,6 +4,20 @@ from nltk.corpus import stopwords  # to get a list of stopwords
 from collections import Counter
 from sentiment import Sentiment
 
+
+def getWordCloudData(sentences):
+    words = []
+    for sentence in sentences:
+        #print(sentence)
+        tokens = word_tokenize(sentence)
+        words.extend(tokens)
+    stop_words = set(stopwords.words('english'))
+    words = [word for word in words if word not in stop_words and len(word) > 2]
+    words_freq = Counter(words)
+    #print(words_freq)
+    words_json = [{'text': word, 'weight': count} for word, count in words_freq.most_common(50)]
+    return words_json
+
 class JsonUtil():
 
     def __init__(self, jsonData):
@@ -12,25 +26,6 @@ class JsonUtil():
         self.text_dict={}
         self. quotes_dict = {}
 
-
-    def getWordCloudData(self):
-        for item in self.jsonData:
-            res = json.loads(item['data'])
-            print(type(res))
-            print(res)
-            for text in item['data']:
-                print(type(text))
-                self.textSet.add(text["t"])
-        words=[]
-        for description in self.textSet:
-            tokens = word_tokenize(description)
-            words.extend(tokens)
-        stop_words = set(stopwords.words('english'))
-        words = [word for word in words if word not in stop_words and len(word) > 2]
-        words_freq = Counter(words)
-        print(words_freq)
-        words_json = [{'text': word, 'weight': count} for word, count in words_freq.items()]
-        return words_json
 
     def getText(self):
         sentDataList = []

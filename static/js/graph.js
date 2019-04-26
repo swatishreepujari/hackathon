@@ -194,18 +194,228 @@ function dashboard(id, fData){
         //pC = pieChart(tF); // create the pie-chart.
         //leg= legend(tF);  // create the legend.
 }
-function pieGraph(id, fData){
-    var w = 300,                            //width
-        h = 300,                            //height
-        r = 100,                            //radius
-        color = d3.scale.category20c();     //builtin range of colors
 
-    // compute data for sentiment
-    fData.forEach(function(d) {
-        if(d.score == 'pos')
-        d.pose=d.freq.low+d.freq.mid+d.freq.high;
+function pieGraph(id, oData){
+    var barColor = 'steelblue';
+    function segColor(c){ return {pos:"#807dba", neg:"#e08214",net:"#41ab5d"}[c]; }
+
+    // compute total for each state.
+    // fData.forEach(function(d){d.total=d.freq.low+d.freq.mid+d.freq.high;});
+
+    var pDataList = [];
+    //console.log(oData.length);
+    oData.forEach(function(d) {
+        d.forEach(function(d1){
+            var pData ={};
+
+            pData.dt = d1.dt;
+            //console.log(d1.dt);
+            pos=0;
+            neg = 2;
+            net = 1;
+            if(d1.score == 'pos'){
+                pos = pos+1;
+            } else if(d1.score == 'neg'){
+                neg = neg+1;
+            } else {
+                net = net +1;
+            }
+            pData.freq = {};
+            pData.freq.pos = pos;
+            pData.freq.neg = neg;
+            pData.freq.net = net;
+            pDataList.push(pData)
+
+        });
+    });
+    //console.log(pDataList)
+
+
+    // function to handle pieChart.
+    function pieChart(pD){
+        var pC ={},    pieDim ={w:250, h: 250};
+        pieDim.r = Math.min(pieDim.w, pieDim.h) / 2;
+
+        // create svg for pie chart.
+        var piesvg = d3.select(id).append("svg")
+            .attr("width", pieDim.w).attr("height", pieDim.h).append("g")
+            .attr("transform", "translate("+pieDim.w/2+","+pieDim.h/2+")");
+
+        // create function to draw the arcs of the pie slices.
+        var arc = d3.svg.arc().outerRadius(pieDim.r - 10).innerRadius(40);
+
+
+        // create a function to compute the pie slice angles.
+        var pie = d3.layout.pie().sort(null).value(function(d) { return d.freq; });
+
+        // Draw the pie slices.
+        piesvg.selectAll("path").data(pie(pD)).enter().append("path").attr("d", arc)
+            .each(function(d) { this._current = d; })
+            .style("fill", function(d) { return segColor(d.data.type); })
+            .on("mouseover",mouseover).on("mouseout",mouseout);
+
+
+
+        // create function to update pie-chart. This will be used by histogram.
+        pC.update = function(nD){
+            piesvg.selectAll("path").data(pie(nD)).transition().duration(500)
+                .attrTween("d", arcTween);
+
         }
-     );
+        // Utility function to be called on mouseover a pie slice.
+        function mouseover(d){
+            // call the update function of histogram with new data.
+            hG.update(fData.map(function(v){
+                return [v.State,v.freq[d.data.type]];}),segColor(d.data.type));
+        }
+        //Utility function to be called on mouseout a pie slice.
+        function mouseout(d){
+            // call the update function of histogram with all data.
+            hG.update(fData.map(function(v){
+                return [v.State,v.total];}), barColor);
+        }
+        // Animating the pie-slice requiring a custom function which specifies
+        // how the intermediate paths should be drawn.
+        function arcTween(a) {
+            var i = d3.interpolate(this._current, a);
+            this._current = i(0);
+            return function(t) { return arc(i(t));    };
+        }
+        return pC;
+    }
 
+    // calculate total frequency by segment for all state.
+     //var tF = ['low','mid','high'].map(function(d){
+       // return {type:d, freq: d3.sum(fData.map(function(t){ return t.freq[d];}))};
+    //});
+
+    // calculate total frequency by segment for all state.
+    var tF1 = ['pos','neg','net'].map(function(d){
+        return {type:d, freq: d3.sum(pDataList.map(function(t){ return t.freq[d];}))};
+    });
+
+    var pC = pieChart(tF1); // create the pie-chart.
+
+}
+
+function lineGraph(id,lData){
+    var lDataList = [];
+    console.log(lData.length);
+    lData.forEach(function(d) {
+        d.forEach(function(d1){
+            var lData ={};
+            lData.Date = d1.qt.d;
+            lData.High = d1.qt.h;
+            lData.Low = d1.qt.l;
+            lData.o = d1.qt.o;
+            lData.Close = d1.qt.c;
+            lDataList.push(lData)
+
+        });
+    });
+    console.log(lDataList)
+
+    // Set the dimensions of the svg
+    var margin = {top: 30, right: 50, bottom: 30, left: 50};
+    var svgWidth = 600;
+    var svgHeight = 270;
+    var graphWidth = svgWidth - margin.left - margin.right;
+    var graphHeight = svgHeight - margin.top - margin.bottom;
+    // Parse the date / time
+    var parseDate = d3.time.format("%d/%B/%Y").parse;
+    // Set the ranges
+    var x = d3.time.scale().range([0, graphWidth]);
+    var y = d3.scale.linear().range([graphHeight, 0]);
+    // Define the axes
+    var xAxis = d3.svg.axis().scale(x)
+        .orient("bottom").ticks(10);
+    var yAxis = d3.svg.axis().scale(y)
+        .orient("left").ticks(6);
+    // Define the High line
+    var highLine = d3.svg.line()
+        .x(function(d) { return x(d.Date); })
+        .y(function(d) { return y(d.High); });
+    var closeLine = d3.svg.line()
+        .x(function(d) { return x(d.Date); })
+        .y(function(d) { return y(d.Close); });
+    var lowLine = d3.svg.line()
+        .x(function(d) { return x(d.Date); })
+        .y(function(d) { return y(d.Low); });
+    var area = d3.svg.area()
+      .x(function(d) { return x(d.Date); })
+      .y0(function(d) { return y(d.Low); })
+      .y1(function(d) { return y(d.High); })
+    // Adds the svg canvas
+    var svg = d3.select(id)
+      .append("svg")
+        .attr("width", svgWidth)
+        .attr("height", svgHeight)
+      .append("g")
+        .attr("transform",
+        "translate(" + margin.left + "," + margin.top + ")")
+
+    // define function
+    function draw(data) {
+      data.forEach(function(d) {
+        d.Date = parseDate(d.Date);
+        d.High = +d.High;
+        d.Close = +d.Close;
+        d.Low = +d.Low;
+      });
+      // Scale the range of the data
+      x.domain(d3.extent(data, function(d) { return d.Date; }));
+      y.domain([d3.min(data, function(d) {
+          return Math.min(d.High, d.Close, d.Low) }),
+          d3.max(data, function(d) {
+          return Math.max(d.High, d.Close, d.Low) })]);
+      // Add the area path.
+      svg.append("path")
+        .datum(data)
+        .attr("class", "area")
+        .attr("d", area)
+      // Add the 2 valueline paths.
+      svg.append("path")
+        .style("stroke", "green")
+        .style("fill", "none")
+        .attr("class", "line")
+        .attr("d", highLine(data));
+      svg.append("path")
+        .style("stroke", "blue")
+        .style("fill", "none")
+        .style("stroke-dasharray", ("3, 3"))
+        .attr("d", closeLine(data));
+      svg.append("path")
+        .style("stroke", "red")
+        .attr("d", lowLine(data));
+      // Add the X Axis
+      svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + graphHeight + ")")
+          .call(xAxis);
+      // Add the Y Axis
+      svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+      svg.append("text")
+        .attr("transform", "translate("+(graphWidth+3)+","+y(graphData[0].High)+")")
+        .attr("dy", ".35em")
+        .attr("text-anchor", "start")
+        .style("fill", "green")
+        .text("High");
+      svg.append("text")
+        .attr("transform", "translate("+(graphWidth+3)+","+y(graphData[0].Low)+")")
+        .attr("dy", ".35em")
+        .attr("text-anchor", "start")
+        .style("fill", "red")
+        .text("Low");
+      svg.append("text")
+        .attr("transform", "translate("+(graphWidth+3)+","+y(graphData[0].Close)+")")
+        .attr("dy", ".35em")
+        .attr("text-anchor", "start")
+        .style("fill", "blue")
+        .text("Close");
+    };
+
+    draw(lDataList);
 
 }
