@@ -117,7 +117,7 @@ def crawlData():
 
 
 def buildUrl(url, dt):
-    return "https://economictimes.indiatimes.com/archivelist/year-2019,month-4,starttime-43567.cms"
+    return "https://economictimes.indiatimes.com/archivelist/year-2019,month-4,starttime-43580.cms"
     # return "https://www.moneycontrol.com/news/business/"
 
 
