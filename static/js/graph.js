@@ -634,6 +634,7 @@ var	svg = d3.select(id)
 	// Add the valueline path.
 	svg.append("path")		// Add the valueline path.
 	    .style("stroke", "red")
+	    .stroke-width: 2px;
 	    .style("stroke-dasharray", ("3, 3"))
 		.attr("class", "line")
 		.attr("d", valueline(values));
