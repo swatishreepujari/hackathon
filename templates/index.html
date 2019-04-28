@@ -14,7 +14,8 @@
   <script type="text/javascript" src="../static/js/graph.js"></script>
     <style> /* set the CSS */
     path {
-      stroke-width: 2;
+      stroke: steelblue;
+      stroke-width: 1;
       fill: none;
     }
     .axis path, .axis line {
@@ -28,7 +29,7 @@
       stroke-width: 0;
     }
   </style>
-
+ price and
 </script>
 
 
@@ -51,7 +52,8 @@
                             height: 300
                      });
                      pieGraph('#panel1',oData);
-				     lineGraph('#panel2',oData);
+				     //lineGraph('#panel2',oData);
+				     corelationGraph('#corelation',oData)
  				});
 				return false;
 			  });
@@ -101,7 +103,7 @@
         </div>
          <div class="panel panel-primary">
             <div class="panel-heading">Feature Cloud</div>
-                <div class="row">
+            <div class="row">
                     <div class="form-group col-xs-4">
                     </div>
                     <div class="form-group col-xs-4" id="word_cloud">
@@ -109,8 +111,19 @@
                     <div class="form-group col-xs-4">
                     </div>
                 </div>
+         </div>
 
-            </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">Corelation</div>
+            <div class="row">
+                    <div class="form-group col-xs-4" id="corelation">
+                    </div>
+                    <div class="form-group col-xs-4" >
+                    </div>
+                    <div class="form-group col-xs-4">
+                    </div>
+                </div>
+         </div>
     </div>
 </section>
 
