@@ -591,16 +591,15 @@ var	y = d3.scale.linear().range([height, 0]);
 
 // Define the axes
 var	xAxis = d3.svg.axis().scale(x)
-	.orient("bottom").ticks(10)
-	.innerTickSize(-height)
-    .outerTickSize(0)
-    .tickPadding(10);
+	.orient("bottom").ticks(10);
+
 
 var	yAxis = d3.svg.axis().scale(y)
-	.orient("left").ticks(5)
-	.innerTickSize(-width)
-    .outerTickSize(0)
-    .tickPadding(10);
+	.orient("left").ticks(5);
+
+	//.innerTickSize(-width)
+    //.outerTickSize(0)
+    //.tickPadding(10);
 
 // Define the line
 var	valueline = d3.svg.line()
@@ -633,10 +632,53 @@ var	svg = d3.select(id)
 
 	// Add the valueline path.
 	svg.append("path")		// Add the valueline path.
-	    .style("stroke", "red")
-	    .stroke-width: 2px;
+	    .style("stroke", "blue")
+	    .style("stroke-width",2)
 		.attr("class", "line")
 		.attr("d", valueline(values));
+
+	// create a tooltip
+    var Tooltip = d3.select(id)
+      .append("div")
+      .style("opacity", 0)
+      .attr("class", "tooltip")
+      .style("background-color", "white")
+      .style("border", "solid")
+      .style("border-width", "2px")
+      .style("border-radius", "5px")
+      .style("padding", "5px")
+
+     // Three function that change the tooltip when user hover / move / leave a cell
+      var mouseover = function(d) {
+        Tooltip
+          .style("opacity", 1)
+      }
+      var mousemove = function(d) {
+        Tooltip
+          .html("Score: " + d.SentiScore)
+          .style("left", (d3.mouse(this)[0]+70) + "px")
+          .style("top", (d3.mouse(this)[1]) + "px")
+      }
+      var mouseleave = function(d) {
+        Tooltip
+          .style("opacity", 0)
+      }
+
+
+	svg
+      .append("g")
+      .selectAll("dot")
+      .data(values)
+      .enter()
+      .append("circle")
+        .attr("cx", function(d) { return x(d.dt) } )
+        .attr("cy", function(d) { return y(d.SentiScore) } )
+        .attr("r", 5)
+        .attr("fill", "#69b3a2")
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave)
+
 
 	// Add the X Axis
 	svg.append("g")			// Add the X Axis
