@@ -488,7 +488,7 @@ var	y = d3.scale.linear().range([height, 0]);
 
 // Define the axes
 var	xAxis = d3.svg.axis().scale(x)
-	.orient("bottom").ticks(5);
+	.orient("bottom").ticks(10);
 
 var	yAxis = d3.svg.axis().scale(y)
 	.orient("left").ticks(5);
@@ -541,4 +541,107 @@ var	svg = d3.select(id)
     draw(corDataList);
 }
 
-//{"20190427": [{"pos":4},{"neg":3}]}
+function sentiGraph(id,cData){
+    corDataList = {};
+    sentiCount={};
+
+    cData.forEach(function(d) {
+        d.forEach(function(d1){
+            count = 0;
+            if (d1.qt.d in sentiCount) {
+                count = sentiCount[d1.qt.d];
+                if (d1.score == 'pos'){
+//                    console.log("pos count" + count)
+                    count = count + 1;
+                } else {
+//                    console.log("neg count" + count)
+                    count = count - 1;
+                }
+                sentiCount[d1.qt.d] = count;
+            } else {
+                sentiCount[d1.qt.d] = count +1;
+            }
+        });
+    });
+    cData.forEach(function(d) {
+         d.forEach(function(d1){
+            var corData ={};
+            corData.dt = d1.qt.d;
+            corData.High = d1.qt.h;
+            corData.Low = d1.qt.l;
+            corData.Open = d1.qt.o;
+            corData.Close = d1.qt.c;
+            corData.Change = d1.qt.c - d1.qt.o;
+            corData.SentiScore = sentiCount[d1.qt.d]
+            corDataList[d1.qt.d] = corData
+         });
+    });
+
+    // Set the dimensions of the canvas / graph
+var	margin = {top: 30, right: 20, bottom: 30, left: 50},
+	width = 600 - margin.left - margin.right,
+	height = 270 - margin.top - margin.bottom;
+
+// Parse the date / time
+var	parseDate = d3.time.format("%d/%B/%Y").parse;
+
+// Set the ranges
+var	x = d3.time.scale().range([0, width]);
+var	y = d3.scale.linear().range([height, 0]);
+
+// Define the axes
+var	xAxis = d3.svg.axis().scale(x)
+	.orient("bottom").ticks(10);
+
+var	yAxis = d3.svg.axis().scale(y)
+	.orient("left").ticks(5);
+
+// Define the line
+var	valueline = d3.svg.line()
+	.x(function(d) { return x(d.dt); })
+	.y(function(d) { return y(d.SentiScore); });
+
+// Adds the svg canvas
+var	svg = d3.select(id)
+	.append("svg")
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom)
+	.append("g")
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // define function
+    function draw(data) {
+        var values = Object.keys(data).map(function(key){
+            return data[key];
+        });
+      values.forEach(function(d) {
+        d.dt = parseDate(d.dt);
+        d.SentiScore = +d.SentiScore;
+      });
+      console.log(values);
+
+
+	// Scale the range of the data
+	x.domain(d3.extent(values, function(d) { return d.dt; }));
+	y.domain([d3.min(values, function(d) { return d.SentiScore; }), d3.max(values, function(d) { return d.SentiScore; })]);
+
+	// Add the valueline path.
+	svg.append("path")		// Add the valueline path.
+	    .style("stroke", "red")
+	    .style("stroke-dasharray", ("3, 3"))
+		.attr("class", "line")
+		.attr("d", valueline(values));
+
+	// Add the X Axis
+	svg.append("g")			// Add the X Axis
+		.attr("class", "x axis")
+		.attr("transform", "translate(0," + height + ")")
+		.call(xAxis);
+
+	// Add the Y Axis
+	svg.append("g")			// Add the Y Axis
+		.attr("class", "y axis")
+		.call(yAxis);
+	};
+    draw(corDataList);
+}
