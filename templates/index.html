@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Sentiment Analysis</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -12,6 +12,7 @@
   <script type="text/javascript" src="../static/js/jqcloud.min.js"></script>
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script type="text/javascript" src="../static/js/graph.js"></script>
+  <script type="text/javascript" src="../static/js/dash.js"></script>
     <style> /* set the CSS */
     path {
       stroke: steelblue;
@@ -50,11 +51,11 @@
                             width: 500,
                             height: 300
                      });
-                     //dashboard('#panel1',oData);
+                     dashboard('#panel1',oData);
 				     //lineGraph('#panel2',oData);
 				     corelationGraph('#corelation',oData)
 				     sentiGraph('#senti',oData)
-				     regression('#regression',oData)
+				     //regression('#regression',oData)
  				});
 				return false;
 			  });
@@ -88,17 +89,17 @@
 <section id="sect">
     <div class="container">
         <div class="panel panel-primary">
-            <div class="panel-heading">Sentiment Graph</div>
+            <div class="panel-heading">Positive/Negetive/Neutral Graph</div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="form-group col-xs-5" id="panel1">
+                    <div class="form-group col-xs-12" id="panel1">
                         <h3>Positive/Negetive/Neutral</h3>
 
                     </div>
-                    <div class="form-group col-xs-7" id="panel2">
+                    <!--<div class="form-group col-xs-7" id="panel2">
                         <h3>Stock Price Movement</h3>
 
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </div>

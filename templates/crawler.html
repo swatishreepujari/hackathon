@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Sentiment Analysis</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -12,12 +12,14 @@
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script type="text/javascript" src="../static/js/graph.js"></script>
+    <script type="text/javascript" src="../static/js/dash.js"></script>
   <script>
         var freqData=[
         {State:'Infosys',freq:{low:5, mid:7, high:12}}
         ,{State:'Tcs',freq:{low:8, mid:5, high:15}}
         ,{State:'HDFC',freq:{low:4, mid:9, high:3}}
         ,{State:'Maruti',freq:{low:2, mid:8, high:11}}];
+
   </script>
   <style>
         table td {
@@ -56,7 +58,7 @@
             }
             content += "</table>"
             $("#resultdata").html(content);
-            dashboard('#histogram',freqData);
+            crawlerGraph('#histogram',freqData);
         });
         return false;
       });
