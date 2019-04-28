@@ -318,7 +318,7 @@ var	svg = d3.select(id)
         d.dt = parseDate(d.dt);
         d.Close = +d.Close;
       });
-      console.log(values);
+     // console.log(values);
 
 
 	// Scale the range of the data
@@ -470,7 +470,7 @@ var	svg = d3.select(id)
         d.dt = parseDate(d.dt);
         d.SentiScore = +d.SentiScore;
       });
-      console.log(values);
+      //console.log(values);
 
 
 	// Scale the range of the data
@@ -612,7 +612,7 @@ function regression(id, rData){
 		var xLabels = data.map(function (d) { return d.SentiScore; })
 
 		xScale.domain(xLabels);
-		yScale.domain([0, Math.round(d3.max(data, function(d) { return parseFloat(d.Change); }))]);
+		yScale.domain([Math.round(d3.min(data, function(d) { return d.Change; })), Math.round(d3.max(data, function(d) { return d.Change; }))]);
 
 		var line = d3.svg.line()
 			.x(function(d) { return xScale(d.SentiScore); })
@@ -620,6 +620,8 @@ function regression(id, rData){
 
 		svg.append("path")
 			.datum(data)
+			.style("stroke", "red")
+	        .style("stroke-width",2)
 			.attr("class","line")
 			.attr("d", line);
 
@@ -637,7 +639,7 @@ function regression(id, rData){
 
 		svg.select(".y.axis")
 			.attr("transform", "translate(" + (margin.left) + ",0)")
-			.call(yAxis.tickFormat(currencyFormat));
+
 
 		// chart title
 		svg.append("text")
@@ -646,7 +648,7 @@ function regression(id, rData){
 			.attr("text-anchor", "middle")
 			.style("font-size", "16px")
 			.style("font-family", "sans-serif")
-			.text("USD/EURO Exhange Rate");
+			.text("Regression Line");
 
 		// x axis label
 		svg.append("text")
@@ -654,11 +656,11 @@ function regression(id, rData){
 			.attr("y", height + margin.bottom)
 			.attr("class", "text-label")
 			.attr("text-anchor", "middle")
-			.text("Year-Month");
+			.text("Sentiment Score");
 
 		// get the x and y values for least squares
 		var xSeries = d3.range(1, xLabels.length + 1);
-		var ySeries = data.map(function(d) { return decimalFormat(d.Change); });
+		var ySeries = data.map(function(d) { return d.Change; });
 
 		var leastSquaresCoeff = leastSquares(xSeries, ySeries);
 
@@ -719,19 +721,18 @@ function regression(id, rData){
 		var intercept = yBar - (xBar * slope);
 		var rSquare = Math.pow(ssXY, 2) / (ssXX * ssYY);
 
+		console.log(slope+ " -> "+intercept+ " -> "+rSquare)
+
 		return [slope, intercept, rSquare];
 
     }
 
-     var values = Object.keys(regDataList).map(function(key){
+     var values1 = Object.keys(regDataList).map(function(key){
             return regDataList[key];
         });
-      values.forEach(function(d) {
-        d.Change = d.Change;
-        d.SentiScore = d.SentiScore;
-     });
-     console.log(values);
 
-     draw(values)
+     console.log(values1);
+
+     draw(values1)
 
 }
