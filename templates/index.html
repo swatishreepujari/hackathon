@@ -50,10 +50,11 @@
                             width: 500,
                             height: 300
                      });
-                     pieGraph('#panel1',oData);
+                     //dashboard('#panel1',oData);
 				     //lineGraph('#panel2',oData);
 				     corelationGraph('#corelation',oData)
 				     sentiGraph('#senti',oData)
+				     regression('#regression',oData)
  				});
 				return false;
 			  });
@@ -123,6 +124,15 @@
                     </div>
                 </div>
          </div>
+
+         <div class="panel panel-primary">
+            <div class="panel-heading">Regression</div>
+            <div class="row">
+                    <div class="form-group col-xs-12" id="regression">
+                    </div>
+                </div>
+         </div>
+
     </div>
 </section>
 
