@@ -524,14 +524,58 @@ var	svg = d3.select(id)
 
 	// Add the valueline path.
 	svg.append("path")		// Add the valueline path.
+	    .style("stroke", "blue")
 		.attr("class", "line")
+		.style("stroke-width",2)
 		.attr("d", valueline(values));
+
+	// create a tooltip
+    var Tooltip = d3.select(id)
+      .append("div")
+      .style("opacity", 0)
+      .attr("class", "tooltip")
+      .style("background-color", "white")
+      .style("border", "solid")
+      .style("border-width", "2px")
+      .style("border-radius", "5px")
+      .style("padding", "5px")
+
+     // Three function that change the tooltip when user hover / move / leave a cell
+      var mouseover = function(d) {
+        Tooltip
+          .style("opacity", 1)
+      }
+      var mousemove = function(d) {
+        Tooltip
+          .html("Close Price: " + d.Close)
+          .style("left", (d3.mouse(this)[0]+70) + "px")
+          .style("top", (d3.mouse(this)[1]) + "px")
+      }
+      var mouseleave = function(d) {
+        Tooltip
+          .style("opacity", 0)
+      }
+
 
 	// Add the X Axis
 	svg.append("g")			// Add the X Axis
 		.attr("class", "x axis")
 		.attr("transform", "translate(0," + height + ")")
 		.call(xAxis);
+
+	svg
+      .append("g")
+      .selectAll("dot")
+      .data(values)
+      .enter()
+      .append("circle")
+        .attr("cx", function(d) { return x(d.dt) } )
+        .attr("cy", function(d) { return y(d.Close) } )
+        .attr("r", 5)
+        .attr("fill", "#69b3a2")
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave)
 
 	// Add the Y Axis
 	svg.append("g")			// Add the Y Axis
@@ -632,7 +676,7 @@ var	svg = d3.select(id)
 
 	// Add the valueline path.
 	svg.append("path")		// Add the valueline path.
-	    .style("stroke", "blue")
+	    .style("stroke", "red")
 	    .style("stroke-width",2)
 		.attr("class", "line")
 		.attr("d", valueline(values));
