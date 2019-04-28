@@ -591,10 +591,16 @@ var	y = d3.scale.linear().range([height, 0]);
 
 // Define the axes
 var	xAxis = d3.svg.axis().scale(x)
-	.orient("bottom").ticks(10);
+	.orient("bottom").ticks(10)
+	.innerTickSize(-height)
+    .outerTickSize(0)
+    .tickPadding(10);
 
 var	yAxis = d3.svg.axis().scale(y)
-	.orient("left").ticks(5);
+	.orient("left").ticks(5)
+	.innerTickSize(-width)
+    .outerTickSize(0)
+    .tickPadding(10);
 
 // Define the line
 var	valueline = d3.svg.line()
