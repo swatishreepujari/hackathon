@@ -520,7 +520,7 @@ var	svg = d3.select(id)
 
 	// Scale the range of the data
 	x.domain(d3.extent(values, function(d) { return d.dt; }));
-	y.domain([0, d3.max(values, function(d) { return d.Close; })]);
+	y.domain([d3.min(values, function(d) { return d.Close; }), d3.max(values, function(d) { return d.Close; })]);
 
 	// Add the valueline path.
 	svg.append("path")		// Add the valueline path.
